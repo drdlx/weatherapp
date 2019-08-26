@@ -76,7 +76,7 @@ class WeatherFragment : Fragment() {
 
         val myLocation = rootView.findViewById(R.id.myLocation) as? TextView
         myLocation!!.setOnClickListener {
-            Log.d("DEBUG", "My Location!")
+            Log.d("DEBUG", "My Location! ")
             changeLocation()
         }
 
