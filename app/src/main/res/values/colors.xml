@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="mainTextColor">#FFFFFF</color>
+    <color name="okButtonTextColor">#1086FF</color>
+    <color name="secondaryTextColor">#66FFFFFF</color>
+    <color name="textFieldColor">#FFFFFF</color>
+    <color name="backgroundColor">#7290B9</color>
+    <color name="colorPrimaryDark">#00574B</color>
+    <color name="colorAccent">#D81B60</color>
+</resources>

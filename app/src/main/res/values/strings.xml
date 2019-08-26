@@ -1,0 +1,16 @@
+<resources>
+   <string name="app_name">WeatherApp</string>
+    <string name="change_city">Сменить город</string>
+    <string name="degree_symbol">&#176;</string>
+    <string name="temperature_units_celsius">C</string>
+    <string name="temperature_units_fahrenheit">F</string>
+    <string name="enter_location">Мое местоположение</string>
+    <string name="my_location">Мое местоположение</string>
+    <string name="wind_header">Ветер</string>
+    <string name="pressure_header">Давление</string>
+    <string name="moisture_header">Влажность</string>
+    <string name="rain_possibility_header">Вероятность дождя</string>
+    <string name="place_not_found">Место не найдено!</string>
+    <string name="coords_issue">Пожалуйста используйте кнопку "Сменить город"</string>
+</resources>
+
