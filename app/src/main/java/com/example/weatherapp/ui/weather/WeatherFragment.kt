@@ -178,11 +178,14 @@ class WeatherFragment : Fragment() {
             val weather = jsonObject.getJSONArray("weather").getJSONObject(0)
             weatherDescription.text = weather.getString("main")
 
-            wind.text = jsonObject.getJSONObject("wind").getString("speed")
+            val windText = jsonObject.getJSONObject("wind").getString("speed") + " " + context!!.getString(R.string.wind_speed)
+            wind.text = windText
 
-            pressure.text = main.getString("pressure")
+            val pressureText = main.getString("pressure") + " " + context!!.getString(R.string.pressure_measure)
+            pressure.text = pressureText
 
-            moisture.text = main.getString("humidity")
+            val moistureText = main.getString("humidity") + "%"
+            moisture.text = moistureText
 
             val rainPossibilityText = main.getString("humidity") + "%"
             rainPossibility.text = rainPossibilityText
