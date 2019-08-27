@@ -69,7 +69,7 @@ class WeatherFragment : Fragment() {
             showInputCityVisilibity()
         }
 
-        val degreesTypeToggle: Switch? = rootView.findViewById(R.id.degreesTypeToggle) as? Switch
+        val degreesTypeToggle: ToggleButton? = rootView.findViewById(R.id.degreesTypeToggle) as? ToggleButton
         degreesTypeToggle!!.setOnCheckedChangeListener { _: CompoundButton, _: Boolean ->
             Log.d("DEBUG", "Change temperature display mode!")
             Log.d("SWITCH", degreesTypeToggle.isChecked.toString())
