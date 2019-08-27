@@ -9,6 +9,8 @@
     <string name="wind_header">Ветер</string>
     <string name="pressure_header">Давление</string>
     <string name="moisture_header">Влажность</string>
+    <string name="wind_speed">м/с</string>
+    <string name="pressure_measure">мм. рт. ст.</string>
     <string name="rain_possibility_header">Вероятность дождя</string>
     <string name="place_not_found">Место не найдено!</string>
     <string name="coords_issue">Пожалуйста используйте кнопку "Сменить город"</string>
