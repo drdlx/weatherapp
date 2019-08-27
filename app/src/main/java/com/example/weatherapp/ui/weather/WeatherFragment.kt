@@ -49,6 +49,16 @@ class WeatherFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
 
+        val city = CityStoring(this.activity).getCity()
+        Log.d("DEBUG", "The city is $city")
+        if (city == "") {
+            Log.d("DEBUG", "Empty string! Let's get the location")
+            changeLocation()
+        } else {
+            Log.d("DEBUG, ","Found saved city! Load data")
+            changeCity(city)
+        }
+
         val rootView = inflater.inflate(R.layout.weather_fragment, container, false)
 
         val changeCity: TextView? = rootView.findViewById(R.id.changeCity) as? TextView
@@ -86,30 +96,10 @@ class WeatherFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val city = CityStoring(this.activity).getCity()
-
         locationManager =
             this.activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        Log.d("DEBUG", "The city is $city")
-        if (city == "") {
-            changeLocation()
-        } else {
-            Log.d("DEBUG, ","Load data!")
-            updateWeatherData(city)
-        }
-
-    }
-
-    private fun loadData() {
-        val city = CityStoring(this.activity).getCity()
-        Log.d("DEBUG", "The city is $city")
-        if (city == "") {
-            changeLocation()
-        } else {
-            Log.d("DEBUG, ","Load data!")
-            updateWeatherData(city)
-        }
+        updateWeatherData(CityStoring(this.activity).getCity().toString())
     }
 
     private fun updateWeatherData(city: String) {
@@ -119,6 +109,7 @@ class WeatherFragment : Fragment() {
 
             Log.d("DEBUG", "RUN!")
             val jsonObject = ApiClient().requestByCityName(city)
+
             if(jsonObject == null) {
                 handler.post {
                     Log.d("DEBUG", "Not found")
@@ -160,7 +151,7 @@ class WeatherFragment : Fragment() {
 
     private fun renderWeather(jsonObject: JSONObject) {
         try {
-            val city = jsonObject.getString("name") + jsonObject.getJSONObject("sys").getString("country")
+            val city = jsonObject.getString("name")
             cityName.text = city
             
             val main = jsonObject.getJSONObject("main")

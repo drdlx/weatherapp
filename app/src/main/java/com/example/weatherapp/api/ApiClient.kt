@@ -2,7 +2,6 @@ package com.example.weatherapp.api
 
 import org.json.JSONObject
 import android.util.Log
-import khttp.responses.Response
 
 class ApiClient {
 
@@ -28,8 +27,7 @@ class ApiClient {
                 Log.e("ERROR", "city:$city")
                 return null
             }
-            val json = JSONObject(response.text)
-            return json
+            return JSONObject(response.text)
 
         } catch (exception: Exception) {
             Log.e("ERROR", exception.toString())
@@ -51,14 +49,13 @@ class ApiClient {
                     "appid" to open_weather_maps_app_id
                 )
             )
-            Log.d("DEBUG", "${response.statusCode}")
-            Log.d("DEBUG", "${response.text}")
+            Log.d("DEBUG", response.statusCode.toString())
+            Log.d("DEBUG", response.text)
             if (response.statusCode != 200) {
                 Log.e("ERROR", response.statusCode.toString())
                 return null
             }
-            val json = JSONObject(response.text)
-            return json
+            return JSONObject(response.text)
 
         } catch (exception: Exception) {
             Log.e("ERROR", exception.toString())

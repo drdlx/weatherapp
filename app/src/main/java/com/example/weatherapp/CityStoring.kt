@@ -6,7 +6,7 @@ import android.content.SharedPreferences
 class CityStoring(activity: Activity?) {
     val prefs: SharedPreferences = activity!!.getPreferences(Activity.MODE_PRIVATE)
 
-    private val city = prefs.getString("city", "London")
+    private val city = prefs.getString("city", "")
 
     private val fahrenheitMode = prefs.getString("fahrenheit", "false")
 
