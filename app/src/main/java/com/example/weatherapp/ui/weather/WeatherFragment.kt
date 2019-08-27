@@ -74,7 +74,8 @@ class WeatherFragment : Fragment() {
 
             CityStoring(this.activity).setFahrenheitMode(degreesTypeToggle.isChecked)
             Log.d("SWITCH", CityStoring(this.activity).getFahrenheitMode().toString())
-            //loadData()
+
+            updateWeatherData(CityStoring(this.activity).getCity())
 
         }
 
@@ -101,7 +102,7 @@ class WeatherFragment : Fragment() {
         locationManager =
             this.activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
 
-        updateWeatherData(CityStoring(this.activity).getCity().toString())
+        updateWeatherData(CityStoring(this.activity).getCity())
     }
 
     private fun updateWeatherData(city: String) {
