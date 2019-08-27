@@ -68,10 +68,12 @@ class WeatherFragment : Fragment() {
         }
 
         val degreesTypeToggle: Switch? = rootView.findViewById(R.id.degreesTypeToggle) as? Switch
-        degreesTypeToggle!!.setOnClickListener {
-            Log.d("DEBUG", "Fahrenheit mode!")
-            degreesTypeToggle.isChecked = !degreesTypeToggle.isChecked
+        degreesTypeToggle!!.setOnCheckedChangeListener { _: CompoundButton, _: Boolean ->
+            Log.d("DEBUG", "Change temperature display mode!")
+            Log.d("SWITCH", degreesTypeToggle.isChecked.toString())
+
             CityStoring(this.activity).setFahrenheitMode(degreesTypeToggle.isChecked)
+            Log.d("SWITCH", CityStoring(this.activity).getFahrenheitMode().toString())
             //loadData()
 
         }
