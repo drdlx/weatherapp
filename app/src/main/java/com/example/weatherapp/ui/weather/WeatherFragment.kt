@@ -39,7 +39,7 @@ class WeatherFragment : Fragment() {
 
     private var locationManager: LocationManager? = null
 
-    private var lattitude: Double? = null
+    private var latitude: Double? = null
     private var longitude: Double? = null
 
     private lateinit var viewModel: WeatherViewModel
@@ -48,6 +48,8 @@ class WeatherFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
+
+
 
         val city = CityStoring(this.activity).getCity()
         Log.d("DEBUG", "The city is $city")
@@ -233,9 +235,11 @@ class WeatherFragment : Fragment() {
         Permissions.check(this.context, Manifest.permission.ACCESS_FINE_LOCATION, null, object: PermissionHandler() {
             override fun onGranted() {
 
+                locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
+
                 val location = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
 
-                lattitude = location?.latitude
+                latitude = location?.latitude
                 longitude = location?.longitude
             }
         })
@@ -244,14 +248,38 @@ class WeatherFragment : Fragment() {
     private fun changeLocation() {
         getCurrentLocation()
 
-        val lat = lattitude
-        val lon = longitude
-        if (lattitude == null || longitude == null) {
-            Toast.makeText(context, context!!.getString(R.string.coords_issue), Toast.LENGTH_LONG)
-                .show()
+        var lat = latitude
+        var lon = longitude
+        if (latitude == null || longitude == null) {
+            try {
+                locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
+
+            } catch(ex: SecurityException) {
+                Log.d("myTag", "Security Exception, no location available")
+                Toast.makeText(context, context!!.getString(R.string.coords_issue), Toast.LENGTH_LONG)
+                    .show()
+            }
         } else {
             updateWeatherDataCoordinates(lat!!, lon!!)
         }
+    }
+
+    private val locationListener: LocationListener = object: LocationListener {
+
+        override fun onLocationChanged(location: Location?) {
+            latitude = location?.latitude
+            longitude = location?.longitude
+            Log.d("DEBUG", "Location changed! Latitude: $latitude longitude: $longitude")
+            updateWeatherDataCoordinates(latitude!!, longitude!!)
+
+        }
+
+        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+
+        override fun onProviderEnabled(provider: String?) {}
+
+        override fun onProviderDisabled(provider: String?) {}
+
     }
 
 }
