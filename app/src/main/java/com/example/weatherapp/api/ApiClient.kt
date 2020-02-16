@@ -1,15 +1,14 @@
 package com.example.weatherapp.api
 
-import android.content.res.Resources
-import android.provider.Settings.System.getString
 import org.json.JSONObject
 import android.util.Log
-import com.example.weatherapp.R
+import com.example.weatherapp.BuildConfig
+
 
 class ApiClient {
 
     private val url = "http://api.openweathermap.org/data/2.5/weather"
-    private val open_weather_maps_app_id = Resources.getSystem().getString(R.string.api_key)
+    private val openWeatherMapsAppId = BuildConfig.WEATHER_API_KEY
 
     fun requestByCityName(city: String): JSONObject? {
         Log.d("DEBUG", "City request by name!, city is $city")
@@ -19,7 +18,7 @@ class ApiClient {
                 params = mapOf(
                     "q" to city,
                     "lang" to "ru",
-                    "appid" to open_weather_maps_app_id
+                    "appid" to openWeatherMapsAppId
                 )
             )
             Log.d("DEBUG", response.statusCode.toString())
@@ -48,7 +47,7 @@ class ApiClient {
                     "lon" to lon.toString(),
                     "lat" to lat.toString(),
                     "lang" to "ru",
-                    "appid" to open_weather_maps_app_id
+                    "appid" to openWeatherMapsAppId
                 )
             )
             Log.d("DEBUG", response.statusCode.toString())
