@@ -1,22 +1,22 @@
 package com.example.weatherapp.ui.weather
 
-import androidx.lifecycle.ViewModelProviders
-import android.content.Context
+import android.app.Activity
 import android.os.Bundle
-import android.os.Handler
 import androidx.fragment.app.Fragment
-import android.location.LocationManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.example.weatherapp.data.CityStoring
+import androidx.annotation.StringRes
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import com.example.weatherapp.R
-import com.example.weatherapp.api.ApiClient
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.weather_fragment.*
-import org.json.JSONObject
+import kotlinx.android.synthetic.main.weather_fragment.view.*
 
+@AndroidEntryPoint
 class WeatherFragment : Fragment() {
 
     companion object {
@@ -24,14 +24,7 @@ class WeatherFragment : Fragment() {
         fun newInstance() = WeatherFragment()
     }
 
-   /* private val handler: Handler = Handler()
-
-    private var locationManager: LocationManager? = null
-
-    private var latitude: Double? = null
-    private var longitude: Double? = null
-*/
-    //private var weatherViewModel: WeatherViewModel by viewModels()
+    private val weatherViewModel: WeatherViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,8 +41,6 @@ class WeatherFragment : Fragment() {
             Log.d("DEBUG, ","Found saved city! Load data")
             changeCity(city)
         }*/
-
-        val rootView = inflater.inflate(R.layout.weather_fragment, container, false)
 
         /*val changeCity: TextView? = rootView.findViewById(R.id.changeCity) as? TextView
         changeCity!!.setOnClickListener {
@@ -86,127 +77,81 @@ class WeatherFragment : Fragment() {
             weatherViewModel.changeLocationCoordinates()
         }*/
 
-        return rootView
+
+
+        return inflater.inflate(R.layout.weather_fragment, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        loading.visibility = View.VISIBLE
+
+        weatherViewModel.updateWeather()
+
+        weatherViewModel.weatherResult.observe(viewLifecycleOwner, Observer {
+            val weatherResult = it ?: return@Observer
+
+            if (weatherResult.error != null) {
+                showWeatherLoadFailed(weatherResult.error)
+                requireActivity().setResult(Activity.RESULT_CANCELED)
+            }
+
+            if (weatherResult.success != null) {
+                updateUiWithWeather(
+                    WeatherView(
+                        temperatureDegrees = weatherResult.success.temperatureDegrees,
+                        city = weatherResult.success.city,
+                        weatherDescription = weatherResult.success.weatherDescription,
+                        wind = weatherResult.success.wind,
+                        pressure = weatherResult.success.pressure,
+                        humidity = weatherResult.success.humidity,
+                        riskOfRain = weatherResult.success.riskOfRain,
+                        weatherType = weatherResult.success.weatherType
+                    )
+                )
+                requireActivity().setResult(Activity.RESULT_OK)
+            }
+        })
+
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
         //weatherViewModel.changeLocationCoordinates()
     }
 
-    /*private fun updateWeatherData() {
-        Log.d("DEBUG", "Update weather data!")
-        Thread {
-            Log.d("DEBUG", "Thread update via string start!")
-
-            Log.d("DEBUG", "RUN!")
-            val jsonObject = ApiClient().requestByCityName(city)
-
-            if(jsonObject == null) {
-                handler.post {
-                    Log.d("DEBUG", "Not found")
-                    Toast.makeText(context, resources.getString(R.string.place_not_found), Toast.LENGTH_LONG).show()
-                }
-            } else {
-                handler.post {
-                    Log.d("DEBUG", "Render")
-                    renderWeather(jsonObject)
-                }
-            }
-
-        }.start()
-
-    }*/
-
-    /*private fun updateUiWithWeather(model: WeatherView) {
-        weatherDegrees.text = model.temperatureDegrees
-    }*/
-
-    /*private fun updateWeatherDataCoordinates(lat: Double, lon: Double) {
-        Log.d("DEBUG", "Update weather data coordinates!")
-        Thread {
-            Log.d("DEBUG", "Thread update coordinates start!")
-
-            Log.d("DEBUG", "RUN!")
-            val jsonObject = ApiClient().requestByCoordinates(lon, lat)
-            if(jsonObject == null) {
-                handler.post {
-                    Log.d("DEBUG", "Not found")
-                    Toast.makeText(context, resources.getString(R.string.place_not_found), Toast.LENGTH_LONG).show()
-                }
-            } else {
-                handler.post {
-                    Log.d("DEBUG", "Render")
-                    renderWeather(jsonObject)
-                }
-            }
-
-        }.start()
-
-    }
-*/
-    /*private fun renderWeather(jsonObject: JSONObject) {
-        try {
-            val city = jsonObject.getString("name")
-            cityName.text = city
-            
-            val main = jsonObject.getJSONObject("main")
-
-            if(CityStoring(this.activity).getFahrenheitMode()) {
-                degreesTypeToggle.isChecked = true
-            }
-
-            val degreesKelvin = main.getString("temp").toFloat()
-            val degrees = if ((degreesTypeToggle.isChecked)) {
-                (((degreesKelvin - 273.15) * (9/5) + 32).toInt()).toString()
-            } else {
-                ((degreesKelvin - 273.15).toInt()).toString()
-            }
-
-            val weatherDegreesText = degrees + getString(R.string.degree_symbol)
-            weatherDegrees.text = weatherDegreesText
-
-            val weather = jsonObject.getJSONArray("weather").getJSONObject(0)
-            weatherDescription.text = weather.getString("main")
-
-            val windText = jsonObject.getJSONObject("wind").getString("speed") + " " + context!!.getString(R.string.wind_speed)
-            wind.text = windText
-
-            val pressureText = main.getString("pressure") + " " + context!!.getString(R.string.pressure_measure)
-            pressure.text = pressureText
-
-            val moistureText = main.getString("humidity") + "%"
-            moisture.text = moistureText
-
-            val rainPossibilityText = main.getString("humidity") + "%"
-            rainPossibility.text = rainPossibilityText
-
-            setWeatherIcon(weather.getInt("id"))
-
-            CityStoring(this.activity).setCity(city)
-
-        } catch (e: Exception) {
-            Log.e("SimpleWeather", e.toString())
-        }
-    }*/
-
-    private fun showInputCityVisilibity() {
-        textInputLayout?.visibility = View.VISIBLE
-    }
-    private fun hideInputCityVisilibity() {
-        textInputLayout?.visibility = View.GONE
+    private fun updateUiWithWeather(weatherView: WeatherView) {
+        cityName.text = weatherView.city
+        weatherDescription.text = weatherView.weatherDescription
+        weatherDegrees.text = getString(R.string.degrees, weatherView.temperatureDegrees)
+        wind.text = weatherView.wind
+        pressure.text = getString(R.string.pressure, weatherView.pressure)
+        humidity.text = getString(R.string.humidity, weatherView.humidity)
+        rainPossibility.text = getString(R.string.rain_possibility, weatherView.humidity)
+        updateWeatherIcon(weatherView.weatherType)
+        loading.visibility = View.GONE
     }
 
-    /*private fun setWeatherIcon(weatherId: Int) {
-        when(weatherId / 100) {
+    private fun showWeatherLoadFailed(@StringRes errorString: Int) {
+        Toast.makeText(context, errorString, Toast.LENGTH_SHORT).show()
+        Snackbar.make(
+            requireView().findViewById(R.id.content),
+            errorString,
+            Snackbar.LENGTH_SHORT).show()
+    }
+
+    private fun updateWeatherIcon(weatherType: Int) {
+        when(weatherType / 100) {
             2 ->  weatherIcon.setImageResource(R.drawable.strom)
             5 -> weatherIcon.setImageResource(R.drawable.rain)
             7 -> weatherIcon.setImageResource(R.drawable.cloud)
             8 -> weatherIcon.setImageResource(R.drawable.sun)
             else -> weatherIcon.setImageResource(R.drawable.partly_cloudy)
         }
-
-    }*/
+    }
 
     /*private fun changeCity(cityName: String) {
         Log.d("DEBUG","change city name!")

@@ -3,16 +3,16 @@ package com.example.weatherapp.data
 import android.app.Activity
 import android.content.SharedPreferences
 
-class CityStoring(activity: Activity?) {
+class CityStoring() {
 
-    val prefs: SharedPreferences = activity!!.getPreferences(Activity.MODE_PRIVATE)
+    /*val prefs: SharedPreferences = activity!!.getPreferences(Activity.MODE_PRIVATE)
 
     private val city = prefs.getString("city", "")
 
     private val fahrenheitMode = prefs.getString("fahrenheit", "false")
 
-    /*private val latitude = prefs.getString("latitude", "")
-    private val longitude = prefs.getString("longitude", "")*/
+    *//*private val latitude = prefs.getString("latitude", "")
+    private val longitude = prefs.getString("longitude", "")*//*
 
     fun getCity(): String {
         return ""
@@ -29,7 +29,7 @@ class CityStoring(activity: Activity?) {
     fun setFahrenheitMode(isFahrenheit: Boolean) {
         prefs.edit().putBoolean("fahrenheit", isFahrenheit).apply()
     }
-
+*/
     /*fun setCoordinates(latitude: Long, longitude: Long) {
         prefs.edit().putString("latitude", latitude.toString()).apply()
         prefs.edit().putString("longitude", longitude.toString()).apply()

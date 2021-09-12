@@ -1,31 +1,38 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         package="com.example.weatherapp">
 
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" /> -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
+            android:name=".App"
             android:icon="@mipmap/ic_launcher"
             android:label="@string/app_name"
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
-            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar">
+            android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
+            android:allowBackup="true"
+            android:fullBackupContent="true">
 
         <service
-                android:name=".data.LocationService"
+                android:name=".data.location.LocationService"
                 android:enabled="true"
-                android:exported="true">
+                android:exported="true"
+                android:permission="ACCESS_BACKGROUND_LOCATION">
 
         </service>
 
         <activity
                 android:name=".ui.weather.WeatherActivity"
                 android:label="@string/app_name"
-                android:screenOrientation="portrait">
+                android:screenOrientation="portrait"
+                android:exported="true"
+                tools:ignore="LockedOrientationActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

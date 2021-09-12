@@ -1,10 +1,12 @@
 package com.example.weatherapp.ui.weather
 
-data class WeatherView (
-    val temperatureDegrees: String,
+data class WeatherView(
+    val temperatureDegrees: Int,
     val city: String,
+    val weatherDescription: String,
     val wind: String,
-    val pressure: String,
-    val humidity: String,
+    val pressure: Int,
+    val humidity: Int,
     val riskOfRain: String,
+    val weatherType: Int,
 )

@@ -1,4 +1,4 @@
-package com.example.weatherapp.data
+package com.example.weatherapp.data.location
 
 import android.app.Service
 import android.content.Intent

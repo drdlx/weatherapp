@@ -1,21 +1,32 @@
 package com.example.weatherapp.ui.weather
 
-import android.Manifest
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
-import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
-import com.example.weatherapp.R
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class WeatherViewModel : ViewModel() {
+@HiltViewModel
+class WeatherViewModel @Inject constructor(): ViewModel() {
 
     private val _weatherResult = MutableLiveData<WeatherResult>()
     val weatherResult: LiveData<WeatherResult> = _weatherResult
+
+    fun updateWeather() {
+        _weatherResult.postValue(
+            WeatherResult(
+            success = WeatherView(
+                temperatureDegrees = 25,
+                city = "New York",
+                weatherDescription = "Good",
+                wind = "NW",
+                pressure = 25,
+                humidity = 36,
+                riskOfRain = "Maybe",
+                weatherType = 200
+            )
+        ))
+    }
 
     fun changeLocationCoordinates() {
         /*getCurrentLocation()
@@ -38,22 +49,6 @@ class WeatherViewModel : ViewModel() {
     }
 
     fun changeLocationCity(city: String) {
-
-    }
-
-    private fun getCurrentLocation() {/*
-
-        Permissions.check(this.context, Manifest.permission.ACCESS_FINE_LOCATION, null, object: PermissionHandler() {
-            override fun onGranted() {
-
-                locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
-
-                val location = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-
-                latitude = location?.latitude
-                longitude = location?.longitude
-            }
-        })*/
     }
 
     /*private val locationListener: LocationListener = object: LocationListener {

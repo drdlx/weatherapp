@@ -14,5 +14,9 @@
     <string name="rain_possibility_header">Вероятность дождя</string>
     <string name="place_not_found">Место не найдено!</string>
     <string name="coords_issue">Пожалуйста используйте кнопку "Сменить город"</string>
+    <string name="degrees">%d&#176;</string>
+    <string name="pressure">%d мм. рт. ст.</string>
+    <string name="humidity">%d</string>
+    <string name="rain_possibility">%1$d</string>
 </resources>
 
