@@ -1,77 +1,66 @@
 package com.example.weatherapp.ui.weather
 
-import android.Manifest
-import android.app.Activity
-import android.arch.lifecycle.ViewModelProviders
+import androidx.lifecycle.ViewModelProviders
 import android.content.Context
-import android.content.pm.PackageManager
-import android.location.Criteria
 import android.os.Bundle
 import android.os.Handler
-import android.support.v4.app.Fragment
-import android.location.Location
-import android.location.LocationListener
+import androidx.fragment.app.Fragment
 import android.location.LocationManager
-import android.support.v4.content.ContextCompat
-import android.support.v4.content.ContextCompat.getSystemService
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
-import com.example.weatherapp.CityStoring
+import com.example.weatherapp.data.CityStoring
 import com.example.weatherapp.R
 import com.example.weatherapp.api.ApiClient
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
-import com.nabinbhandari.android.permissions.PermissionHandler
-import com.nabinbhandari.android.permissions.Permissions
 import kotlinx.android.synthetic.main.weather_fragment.*
 import org.json.JSONObject
 
 class WeatherFragment : Fragment() {
 
     companion object {
+        private const val TAG = "WeatherFragment"
         fun newInstance() = WeatherFragment()
     }
 
-    private val handler: Handler = Handler()
+   /* private val handler: Handler = Handler()
 
     private var locationManager: LocationManager? = null
 
     private var latitude: Double? = null
     private var longitude: Double? = null
-
-    private lateinit var viewModel: WeatherViewModel
+*/
+    //private var weatherViewModel: WeatherViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
-
-
+        /*
         val city = CityStoring(this.activity).getCity()
         Log.d("DEBUG", "The city is $city")
+
         if (city == "") {
             Log.d("DEBUG", "Empty string! Let's get the location")
-            changeLocation()
+            //changeLocation()
         } else {
             Log.d("DEBUG, ","Found saved city! Load data")
             changeCity(city)
-        }
+        }*/
 
         val rootView = inflater.inflate(R.layout.weather_fragment, container, false)
 
-        val changeCity: TextView? = rootView.findViewById(R.id.changeCity) as? TextView
+        /*val changeCity: TextView? = rootView.findViewById(R.id.changeCity) as? TextView
         changeCity!!.setOnClickListener {
             Log.d("DEBUG", "OnClick by CityName")
             showInputCityVisilibity()
-        }
+        }*/
 
-        val degreesTypeToggle: ToggleButton? = rootView.findViewById(R.id.degreesTypeToggle) as? ToggleButton
-        degreesTypeToggle!!.setOnCheckedChangeListener { _: CompoundButton, _: Boolean ->
-            Log.d("DEBUG", "Change temperature display mode!")
+//        val degreesTypeToggle = requireView().findViewById<ToggleButton>(R.id.degreesTypeToggle)
+
+        /*degreesTypeToggle.setOnCheckedChangeListener { _: CompoundButton, _: Boolean ->
+            Log.d(TAG, "Change temperature display mode!")
             Log.d("SWITCH", degreesTypeToggle.isChecked.toString())
 
             CityStoring(this.activity).setFahrenheitMode(degreesTypeToggle.isChecked)
@@ -80,34 +69,32 @@ class WeatherFragment : Fragment() {
             updateWeatherData(CityStoring(this.activity).getCity())
 
         }
+        */
 
-        val changeCityOk = rootView.findViewById(R.id.changeCityOk) as? Button
-        changeCityOk!!.setOnClickListener {
+        /*val changeCityOk = requireActivity().findViewById<Button>(R.id.changeCityOk)
+
+        changeCityOk.setOnClickListener {
             Log.d("DEBUG", "Ok button pressed!")
             val cityLocation = changeCityInput.text
-            changeCity(cityLocation.toString())
+            weatherViewModel.changeLocationCity(cityLocation.toString())
             hideInputCityVisilibity()
-        }
+        }*/
 
-        val myLocation = rootView.findViewById(R.id.myLocation) as? TextView
-        myLocation!!.setOnClickListener {
-            Log.d("DEBUG", "My Location! ")
-            changeLocation()
-        }
+        /*val myLocation = requireActivity().findViewById<TextView>(R.id.myLocation)
+        myLocation.setOnClickListener {
+            Log.d("DEBUG", "My Location!")
+            weatherViewModel.changeLocationCoordinates()
+        }*/
 
         return rootView
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        locationManager =
-            this.activity!!.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-
-        updateWeatherData(CityStoring(this.activity).getCity())
+        //weatherViewModel.changeLocationCoordinates()
     }
 
-    private fun updateWeatherData(city: String) {
+    /*private fun updateWeatherData() {
         Log.d("DEBUG", "Update weather data!")
         Thread {
             Log.d("DEBUG", "Thread update via string start!")
@@ -118,7 +105,7 @@ class WeatherFragment : Fragment() {
             if(jsonObject == null) {
                 handler.post {
                     Log.d("DEBUG", "Not found")
-                    Toast.makeText(context, context!!.getString(R.string.place_not_found), Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, resources.getString(R.string.place_not_found), Toast.LENGTH_LONG).show()
                 }
             } else {
                 handler.post {
@@ -129,9 +116,13 @@ class WeatherFragment : Fragment() {
 
         }.start()
 
-    }
+    }*/
 
-    private fun updateWeatherDataCoordinates(lat: Double, lon: Double) {
+    /*private fun updateUiWithWeather(model: WeatherView) {
+        weatherDegrees.text = model.temperatureDegrees
+    }*/
+
+    /*private fun updateWeatherDataCoordinates(lat: Double, lon: Double) {
         Log.d("DEBUG", "Update weather data coordinates!")
         Thread {
             Log.d("DEBUG", "Thread update coordinates start!")
@@ -141,7 +132,7 @@ class WeatherFragment : Fragment() {
             if(jsonObject == null) {
                 handler.post {
                     Log.d("DEBUG", "Not found")
-                    Toast.makeText(context, context!!.getString(R.string.place_not_found), Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, resources.getString(R.string.place_not_found), Toast.LENGTH_LONG).show()
                 }
             } else {
                 handler.post {
@@ -153,8 +144,8 @@ class WeatherFragment : Fragment() {
         }.start()
 
     }
-
-    private fun renderWeather(jsonObject: JSONObject) {
+*/
+    /*private fun renderWeather(jsonObject: JSONObject) {
         try {
             val city = jsonObject.getString("name")
             cityName.text = city
@@ -197,7 +188,7 @@ class WeatherFragment : Fragment() {
         } catch (e: Exception) {
             Log.e("SimpleWeather", e.toString())
         }
-    }
+    }*/
 
     private fun showInputCityVisilibity() {
         textInputLayout?.visibility = View.VISIBLE
@@ -206,83 +197,20 @@ class WeatherFragment : Fragment() {
         textInputLayout?.visibility = View.GONE
     }
 
-    private fun setWeatherIcon(weatherId: Int) {
-        val id = weatherId / 100
-        if (weatherId == 800) {
-            weatherIcon.setImageResource(R.drawable.sun)
-        } else {
-            when(id) {
-                2 ->  weatherIcon.setImageResource(R.drawable.strom)
-                5 -> weatherIcon.setImageResource(R.drawable.rain)
-                7 -> weatherIcon.setImageResource(R.drawable.cloud)
-                else -> weatherIcon.setImageResource(R.drawable.partly_cloudy)
-            }
+    /*private fun setWeatherIcon(weatherId: Int) {
+        when(weatherId / 100) {
+            2 ->  weatherIcon.setImageResource(R.drawable.strom)
+            5 -> weatherIcon.setImageResource(R.drawable.rain)
+            7 -> weatherIcon.setImageResource(R.drawable.cloud)
+            8 -> weatherIcon.setImageResource(R.drawable.sun)
+            else -> weatherIcon.setImageResource(R.drawable.partly_cloudy)
         }
 
-    }
+    }*/
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this.activity!!).get(WeatherViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
-    private fun changeCity(cityName: String) {
+    /*private fun changeCity(cityName: String) {
         Log.d("DEBUG","change city name!")
-        updateWeatherData(cityName)
+        weatherViewModel.updateWeatherData(cityName)
         CityStoring(this.activity).setCity(cityName)
-    }
-
-    private fun getCurrentLocation() {
-
-        Permissions.check(this.context, Manifest.permission.ACCESS_FINE_LOCATION, null, object: PermissionHandler() {
-            override fun onGranted() {
-
-                locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
-
-                val location = locationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)
-
-                latitude = location?.latitude
-                longitude = location?.longitude
-            }
-        })
-    }
-
-    private fun changeLocation() {
-        getCurrentLocation()
-
-        var lat = latitude
-        var lon = longitude
-        if (latitude == null || longitude == null) {
-            try {
-                locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
-
-            } catch(ex: SecurityException) {
-                Log.d("myTag", "Security Exception, no location available")
-                Toast.makeText(context, context!!.getString(R.string.coords_issue), Toast.LENGTH_LONG)
-                    .show()
-            }
-        } else {
-            updateWeatherDataCoordinates(lat!!, lon!!)
-        }
-    }
-
-    private val locationListener: LocationListener = object: LocationListener {
-
-        override fun onLocationChanged(location: Location?) {
-            latitude = location?.latitude
-            longitude = location?.longitude
-            Log.d("DEBUG", "Location changed! Latitude: $latitude longitude: $longitude")
-            updateWeatherDataCoordinates(latitude!!, longitude!!)
-
-        }
-
-        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-
-        override fun onProviderEnabled(provider: String?) {}
-
-        override fun onProviderDisabled(provider: String?) {}
-
-    }
-
+    }*/
 }

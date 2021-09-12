@@ -7,7 +7,7 @@ import com.example.weatherapp.BuildConfig
 
 class ApiClient {
 
-    private val url = "http://api.openweathermap.org/data/2.5/weather"
+   /* private val url = "http://api.openweathermap.org/data/2.5/weather"
     private val openWeatherMapsAppId = BuildConfig.WEATHER_API_KEY
 
     fun requestByCityName(city: String): JSONObject? {
@@ -63,5 +63,5 @@ class ApiClient {
             Log.e("ERROR", "lon: $lon lat: $lat")
             return null
         }
-    }
+    }*/
 }
