@@ -7,9 +7,12 @@ import com.example.weatherapp.BuildConfig
 
 class ApiClient {
 
-   /* private val url = "http://api.openweathermap.org/data/2.5/weather"
-    private val openWeatherMapsAppId = BuildConfig.WEATHER_API_KEY
+    /*private val url = "http://api.openweathermap.org/data/2.5"
+    private val openWeatherMapsAppId = BuildConfig.WEATHER_API_KEY*/
 
+
+
+/*
     fun requestByCityName(city: String): JSONObject? {
         Log.d("DEBUG", "City request by name!, city is $city")
         try {

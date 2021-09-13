@@ -99,16 +99,7 @@ class WeatherFragment : Fragment() {
 
             if (weatherResult.success != null) {
                 updateUiWithWeather(
-                    WeatherView(
-                        temperatureDegrees = weatherResult.success.temperatureDegrees,
-                        city = weatherResult.success.city,
-                        weatherDescription = weatherResult.success.weatherDescription,
-                        wind = weatherResult.success.wind,
-                        pressure = weatherResult.success.pressure,
-                        humidity = weatherResult.success.humidity,
-                        riskOfRain = weatherResult.success.riskOfRain,
-                        weatherType = weatherResult.success.weatherType
-                    )
+                    weatherResult.success
                 )
                 requireActivity().setResult(Activity.RESULT_OK)
             }
@@ -137,10 +128,10 @@ class WeatherFragment : Fragment() {
 
     private fun showWeatherLoadFailed(@StringRes errorString: Int) {
         Toast.makeText(context, errorString, Toast.LENGTH_SHORT).show()
-        Snackbar.make(
+        /*Snackbar.make(
             requireView().findViewById(R.id.content),
             errorString,
-            Snackbar.LENGTH_SHORT).show()
+            Snackbar.LENGTH_SHORT).show()*/
     }
 
     private fun updateWeatherIcon(weatherType: Int) {

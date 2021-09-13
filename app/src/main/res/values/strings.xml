@@ -18,5 +18,6 @@
     <string name="pressure">%d мм. рт. ст.</string>
     <string name="humidity">%d</string>
     <string name="rain_possibility">%1$d</string>
+    <string name="weather_load_error">Error occured during weather update!</string>
 </resources>
 
