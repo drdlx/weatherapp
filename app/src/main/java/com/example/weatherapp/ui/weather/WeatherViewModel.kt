@@ -50,7 +50,7 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    fun changeLocationCoordinates() {
+    fun changeLocationCoordinates(isFahrenheitMode: Boolean) {
         /*getCurrentLocation()
 
         var lat = latitude
@@ -77,23 +77,4 @@ class WeatherViewModel @Inject constructor(
             updateWeatherUi(result)
         }
     }
-
-    /*private val locationListener: LocationListener = object: LocationListener {
-
-        override fun onLocationChanged(location: Location?) {
-            latitude = location?.latitude
-            longitude = location?.longitude
-            Log.d("DEBUG", "Location changed! Latitude: $latitude longitude: $longitude")
-            updateWeatherDataCoordinates(latitude!!, longitude!!)
-
-        }
-
-        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
-
-        override fun onProviderEnabled(provider: String?) {}
-
-        override fun onProviderDisabled(provider: String?) {}
-
-    }
-*/
 }

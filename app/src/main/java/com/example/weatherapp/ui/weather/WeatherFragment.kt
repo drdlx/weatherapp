@@ -1,6 +1,8 @@
 package com.example.weatherapp.ui.weather
 
+import android.Manifest
 import android.app.Activity
+import android.content.pm.PackageManager
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -16,6 +18,9 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.weather_fragment.*
 import kotlinx.android.synthetic.main.weather_fragment.view.*
 import android.util.Log
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.weatherapp.data.WeatherPreferences
 
 @AndroidEntryPoint
@@ -27,6 +32,28 @@ class WeatherFragment : Fragment() {
     }
 
     private val weatherViewModel: WeatherViewModel by viewModels()
+
+    private val requestPermissionLauncher =
+        registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted: Boolean ->
+            if (isGranted) {
+                weatherViewModel
+                    .changeLocationCoordinates(
+                        WeatherPreferences.getInstance().getFahrenheitMode(requireContext())
+                    )
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "Location weather update is unavailable!",
+                    Toast.LENGTH_LONG
+                )
+                weatherViewModel.updateWeather(
+                    WeatherPreferences.getInstance().getCityId(requireContext()),
+                    WeatherPreferences.getInstance().getFahrenheitMode(requireContext())
+                )
+            }
+        }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -48,6 +75,24 @@ class WeatherFragment : Fragment() {
             WeatherPreferences.getInstance().getCityId(requireContext()),
             WeatherPreferences.getInstance().getFahrenheitMode(requireContext())
         )
+
+        when {
+            ContextCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) == PackageManager.PERMISSION_GRANTED -> {
+                /*weatherViewModel.changeLocationCoordinates(
+                    WeatherPreferences.getInstance().getFahrenheitMode(requireContext())
+                )*/
+                weatherViewModel.updateWeather(
+                    WeatherPreferences.getInstance().getCityId(requireContext()),
+                    WeatherPreferences.getInstance().getFahrenheitMode(requireContext())
+                )
+            }
+            else -> {
+                requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+            }
+        }
 
         degreesTypeToggle.setOnCheckedChangeListener { _: CompoundButton, _: Boolean ->
             Log.d(TAG, "Change temperature display mode!")
@@ -106,8 +151,6 @@ class WeatherFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        weatherViewModel.changeLocationCoordinates()
     }
 
     private fun updateUiWithWeather(weatherView: WeatherView) {
