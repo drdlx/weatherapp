@@ -39,10 +39,10 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    fun updateWeather() {
+    fun updateWeather(cityId: Int) {
 
         viewModelScope.launch {
-            val result = weatherRepository.getWeatherByCityId(2172797)
+            val result = weatherRepository.getWeatherByCityId(cityId)
             updateWeatherUi(result)
         }
     }

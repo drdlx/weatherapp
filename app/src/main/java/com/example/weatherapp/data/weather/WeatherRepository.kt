@@ -48,6 +48,7 @@ class WeatherRepository @Inject constructor(
     ): WeatherView {
 
         return WeatherView(
+            cityId = response.id,
             temperatureDegrees = (response.main?.temp ?: 0).toInt(),
             city = response.name ?: "Unknown",
             weatherDescription = response.weather[0].description ?: "Unknown",

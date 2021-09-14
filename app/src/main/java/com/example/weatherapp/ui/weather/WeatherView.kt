@@ -1,6 +1,7 @@
 package com.example.weatherapp.ui.weather
 
 data class WeatherView(
+    val cityId: Int,
     val temperatureDegrees: Int,
     val city: String,
     val weatherDescription: String,

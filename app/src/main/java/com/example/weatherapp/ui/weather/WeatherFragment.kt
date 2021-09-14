@@ -16,6 +16,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.weather_fragment.*
 import kotlinx.android.synthetic.main.weather_fragment.view.*
 import android.util.Log
+import com.example.weatherapp.data.WeatherPreferences
 
 @AndroidEntryPoint
 class WeatherFragment : Fragment() {
@@ -31,25 +32,6 @@ class WeatherFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        /*
-        val city = CityStoring(this.activity).getCity()
-        Log.d("DEBUG", "The city is $city")
-
-        if (city == "") {
-            Log.d("DEBUG", "Empty string! Let's get the location")
-            //changeLocation()
-        } else {
-            Log.d("DEBUG, ","Found saved city! Load data")
-            changeCity(city)
-        }*/
-
-        /*val myLocation = requireActivity().findViewById<TextView>(R.id.myLocation)
-        myLocation.setOnClickListener {
-            Log.d("DEBUG", "My Location!")
-            weatherViewModel.changeLocationCoordinates()
-        }*/
-
-
 
         return inflater.inflate(R.layout.weather_fragment, container, false)
     }
@@ -59,7 +41,8 @@ class WeatherFragment : Fragment() {
 
         loading.visibility = View.VISIBLE
 
-        weatherViewModel.updateWeather()
+        val cityId = WeatherPreferences.getInstance().getCityId(requireContext())
+        weatherViewModel.updateWeather(cityId)
 
         degreesTypeToggle.setOnCheckedChangeListener { _: CompoundButton, _: Boolean ->
             Log.d(TAG, "Change temperature display mode!")
@@ -72,18 +55,15 @@ class WeatherFragment : Fragment() {
 
         }
 
-        /*val changeCity: TextView = requireActivity().findViewById(R.id.changeCity)
-        val changeCityOk = requireActivity().findViewById<Button>(R.id.changeCityOk)*/
-
         changeCity.setOnClickListener {
             Log.d("DEBUG", "Display change city form")
-
             textInputLayout.visibility = View.VISIBLE
         }
 
         changeCityOk.setOnClickListener {
             Log.d("DEBUG", "Ok button pressed!")
             val cityLocation = changeCityInput.text
+            loading.visibility = View.VISIBLE
             weatherViewModel.changeLocationCity(cityLocation.toString())
             textInputLayout.visibility = View.GONE
         }
@@ -97,6 +77,12 @@ class WeatherFragment : Fragment() {
             }
 
             if (weatherResult.success != null) {
+
+                val id = weatherResult.success.cityId
+
+                WeatherPreferences.getInstance()
+                    .setCityId(requireContext(), id)
+
                 updateUiWithWeather(
                     weatherResult.success
                 )
@@ -110,7 +96,7 @@ class WeatherFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //weatherViewModel.changeLocationCoordinates()
+        weatherViewModel.changeLocationCoordinates()
     }
 
     private fun updateUiWithWeather(weatherView: WeatherView) {
