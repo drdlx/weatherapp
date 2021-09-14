@@ -1,23 +1,22 @@
 <resources>
    <string name="app_name">WeatherApp</string>
-    <string name="change_city">Сменить город</string>
+    <string name="change_city">Change city</string>
     <string name="degree_symbol">&#176;</string>
     <string name="temperature_units_celsius">C</string>
     <string name="temperature_units_fahrenheit">F</string>
-    <string name="enter_location">Мое местоположение</string>
-    <string name="my_location">Мое местоположение</string>
-    <string name="wind_header">Ветер</string>
-    <string name="pressure_header">Давление</string>
-    <string name="moisture_header">Влажность</string>
-    <string name="wind_speed">м/с</string>
-    <string name="pressure_measure">мм. рт. ст.</string>
-    <string name="rain_possibility_header">Вероятность дождя</string>
-    <string name="place_not_found">Место не найдено!</string>
-    <string name="coords_issue">Пожалуйста используйте кнопку "Сменить город"</string>
+    <string name="enter_location">Enter location</string>
+    <string name="my_location">My location</string>
+    <string name="wind_header">Wind</string>
+    <string name="pressure_header">Pressure</string>
+    <string name="moisture_header">Humidity</string>
+    <string name="wind_speed">m/s</string>
+    <string name="rain_possibility_header">Rain possibility</string>
+    <string name="place_not_found">City not found!</string>
+    <string name="coords_issue">Please use "Change city" button</string>
     <string name="degrees">%d&#176;</string>
-    <string name="pressure">%d мм. рт. ст.</string>
-    <string name="humidity">%d</string>
-    <string name="rain_possibility">%1$d</string>
-    <string name="weather_load_error">Error occured during weather update!</string>
+    <string name="pressure">%d mm</string>
+    <string name="humidity">%d&#176;</string>
+    <string name="rain_possibility">%d&#176;</string>
+    <string name="weather_load_error">Error occurred during weather update!</string>
 </resources>
 
