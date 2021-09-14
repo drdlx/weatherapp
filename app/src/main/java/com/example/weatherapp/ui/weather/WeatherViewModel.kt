@@ -39,10 +39,13 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    fun updateWeather(cityId: Int) {
+    fun updateWeather(
+        cityId: Int,
+        isFahrenheitMode: Boolean
+    ) {
 
         viewModelScope.launch {
-            val result = weatherRepository.getWeatherByCityId(cityId)
+            val result = weatherRepository.getWeatherByCityId(cityId, isFahrenheitMode)
             updateWeatherUi(result)
         }
     }
@@ -67,10 +70,10 @@ class WeatherViewModel @Inject constructor(
         }*/
     }
 
-    fun changeLocationCity(city: String) {
+    fun changeLocationCity(city: String, isFahrenheitMode: Boolean) {
 
         viewModelScope.launch {
-            val result = weatherRepository.getWeatherByCityName(city)
+            val result = weatherRepository.getWeatherByCityName(city, isFahrenheitMode)
             updateWeatherUi(result)
         }
     }

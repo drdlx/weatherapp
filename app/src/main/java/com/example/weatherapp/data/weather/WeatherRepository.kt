@@ -18,9 +18,10 @@ class WeatherRepository @Inject constructor(
     }
 
     suspend fun getWeatherByCityId(
-        cityId: Int
+        cityId: Int,
+        isFahrenheitMode: Boolean,
     ): Result<WeatherView> = withContext(Dispatchers.IO) {
-        when (val response = remoteDataSource.getWeatherByCityId(cityId)) {
+        when (val response = remoteDataSource.getWeatherByCityId(cityId, isFahrenheitMode)) {
             is Result.Success -> {
                 return@withContext Result.Success(serializeWeatherResponse(response.data))
             }
@@ -31,9 +32,10 @@ class WeatherRepository @Inject constructor(
     }
 
     suspend fun getWeatherByCityName(
-        cityName: String
+        cityName: String,
+        isFahrenheitMode: Boolean
     ): Result<WeatherView> = withContext(Dispatchers.IO) {
-        when (val response = remoteDataSource.getWeatherByCityName(cityName)) {
+        when (val response = remoteDataSource.getWeatherByCityName(cityName, isFahrenheitMode)) {
             is Result.Success -> {
                 return@withContext Result.Success(serializeWeatherResponse(response.data))
             }
@@ -44,7 +46,7 @@ class WeatherRepository @Inject constructor(
     }
 
     private fun serializeWeatherResponse(
-        response: WeatherResponse
+        response: WeatherResponse,
     ): WeatherView {
 
         return WeatherView(

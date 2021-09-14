@@ -41,17 +41,25 @@ class WeatherFragment : Fragment() {
 
         loading.visibility = View.VISIBLE
 
-        val cityId = WeatherPreferences.getInstance().getCityId(requireContext())
-        weatherViewModel.updateWeather(cityId)
+        degreesTypeToggle.isChecked = WeatherPreferences.getInstance()
+            .getFahrenheitMode(requireContext())
+
+        weatherViewModel.updateWeather(
+            WeatherPreferences.getInstance().getCityId(requireContext()),
+            WeatherPreferences.getInstance().getFahrenheitMode(requireContext())
+        )
 
         degreesTypeToggle.setOnCheckedChangeListener { _: CompoundButton, _: Boolean ->
             Log.d(TAG, "Change temperature display mode!")
             Log.d(TAG, degreesTypeToggle.isChecked.toString())
 
-            /*CityStoring(this.activity).setFahrenheitMode(degreesTypeToggle.isChecked)
-            Log.d("SWITCH", CityStoring(this.activity).getFahrenheitMode().toString())
+            WeatherPreferences.getInstance()
+                .setFahrenheitMode(requireContext(), degreesTypeToggle.isChecked)
 
-            updateWeatherData(CityStoring(this.activity).getCity())*/
+            weatherViewModel.updateWeather(
+                WeatherPreferences.getInstance().getCityId(requireContext()),
+                degreesTypeToggle.isChecked
+            )
 
         }
 
@@ -64,7 +72,10 @@ class WeatherFragment : Fragment() {
             Log.d("DEBUG", "Ok button pressed!")
             val cityLocation = changeCityInput.text
             loading.visibility = View.VISIBLE
-            weatherViewModel.changeLocationCity(cityLocation.toString())
+            weatherViewModel.changeLocationCity(
+                cityLocation.toString(),
+                WeatherPreferences.getInstance().getFahrenheitMode(requireContext())
+            )
             textInputLayout.visibility = View.GONE
         }
 

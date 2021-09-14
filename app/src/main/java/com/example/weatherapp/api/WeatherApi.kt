@@ -13,6 +13,7 @@ interface WeatherApi {
     @GET("weather")
     fun getWeatherByCityId(
         @Query("id") cityId: Int,
+        @Query("units") units: String,
         @Query("appid") apiKey: String,
     ): Call<WeatherResponse>
 
@@ -20,12 +21,14 @@ interface WeatherApi {
     fun getWeatherByCoordinates(
         @Query("lat") lat: Int,
         @Query("lon") lon: Int,
+        @Query("units") units: String,
         @Query("appid") apiKey: String,
     ): Call<WeatherResponse>
 
     @GET("weather")
     fun getWeatherByCityName(
         @Query("q") cityName: String,
+        @Query("units") units: String,
         @Query("appid") apiKey: String,
     ): Call<WeatherResponse>
 }

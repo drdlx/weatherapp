@@ -17,12 +17,19 @@ import javax.security.auth.callback.Callback
 class WeatherRemoteDataSource @Inject constructor() {
 
     fun getWeatherByCityId(
-        cityId: Int
+        cityId: Int,
+        isFahrenheitMode: Boolean,
     ): Result<WeatherResponse> {
+        val units = if (isFahrenheitMode) {
+            "imperial"
+        } else {
+            "metric"
+        }
         val response = WeatherNetwork
             .retrofit
             .getWeatherByCityId(
                 cityId,
+                units,
                 BuildConfig.WEATHER_API_KEY
             ).execute()
         Log.d("DEBUG", "${response}")
@@ -40,11 +47,18 @@ class WeatherRemoteDataSource @Inject constructor() {
 
     fun getWeatherByCityName(
         cityName: String,
+        isFahrenheitMode: Boolean,
     ): Result<WeatherResponse> {
+        val units = if (isFahrenheitMode) {
+            "imperial"
+        } else {
+            "metric"
+        }
         val response = WeatherNetwork
             .retrofit
             .getWeatherByCityName(
                 cityName,
+                units,
                 BuildConfig.WEATHER_API_KEY
             ).execute()
 
