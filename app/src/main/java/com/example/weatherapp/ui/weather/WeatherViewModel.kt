@@ -50,24 +50,11 @@ class WeatherViewModel @Inject constructor(
         }
     }
 
-    fun changeLocationCoordinates(isFahrenheitMode: Boolean) {
-        /*getCurrentLocation()
-
-        var lat = latitude
-        var lon = longitude
-
-        if (latitude == null || longitude == null) {
-            try {
-                locationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0L, 0f, locationListener)
-
-            } catch(ex: SecurityException) {
-                Log.d("myTag", "Security Exception, no location available")
-                Toast.makeText(context, context!!.getString(R.string.coords_issue), Toast.LENGTH_LONG)
-                    .show()
-            }
-        } else {
-            updateWeatherDataCoordinates(lat!!, lon!!)
-        }*/
+    fun changeLocationCoordinates(lat: Double, lon: Double, isFahrenheitMode: Boolean) {
+        viewModelScope.launch {
+            val result = weatherRepository.getWeatherByCoordinates(lat, lon, isFahrenheitMode)
+            updateWeatherUi(result)
+        }
     }
 
     fun changeLocationCity(city: String, isFahrenheitMode: Boolean) {

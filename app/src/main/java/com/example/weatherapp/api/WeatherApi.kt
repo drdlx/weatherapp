@@ -19,8 +19,8 @@ interface WeatherApi {
 
     @GET("weather")
     fun getWeatherByCoordinates(
-        @Query("lat") lat: Int,
-        @Query("lon") lon: Int,
+        @Query("lat") lat: Double,
+        @Query("lon") lon: Double,
         @Query("units") units: String,
         @Query("appid") apiKey: String,
     ): Call<WeatherResponse>

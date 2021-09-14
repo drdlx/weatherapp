@@ -75,6 +75,34 @@ class WeatherRemoteDataSource @Inject constructor() {
         }
     }
 
+    fun getWeatherByCoordinates(lat: Double, lon: Double, isFahrenheitMode: Boolean): Result<WeatherResponse> {
+        val units = if (isFahrenheitMode) {
+            "imperial"
+        } else {
+            "metric"
+        }
+        val response = WeatherNetwork
+            .retrofit
+            .getWeatherByCoordinates(
+                lat,
+                lon,
+                units,
+                BuildConfig.WEATHER_API_KEY
+            ).execute()
+
+        Log.d("DEBUG", "$response")
+        return if (response.isSuccessful) {
+            val result = response.body()
+            if (result != null) {
+                Result.Success(result)
+            } else {
+                Result.Error(Exception("Response is empty!"))
+            }
+        } else {
+            Result.Error(Exception("${response.errorBody()}"))
+        }
+    }
+
     companion object {
         private const val TAG = "WeatherRemoteDataSource"
     }

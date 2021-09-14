@@ -1,6 +1,7 @@
 package com.example.weatherapp.ui.weather
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -22,6 +23,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.weatherapp.data.WeatherPreferences
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 
 @AndroidEntryPoint
 class WeatherFragment : Fragment() {
@@ -31,21 +34,29 @@ class WeatherFragment : Fragment() {
         fun newInstance() = WeatherFragment()
     }
 
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
     private val weatherViewModel: WeatherViewModel by viewModels()
 
+    @SuppressLint("MissingPermission")
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                weatherViewModel
-                    .changeLocationCoordinates(
-                        WeatherPreferences.getInstance().getFahrenheitMode(requireContext())
-                    )
+                fusedLocationClient.lastLocation.addOnSuccessListener {
+                    if (it != null) {
+                        weatherViewModel.changeLocationCoordinates(
+                            it.latitude,
+                            it.longitude,
+                            WeatherPreferences.getInstance().getFahrenheitMode(requireContext())
+                        )
+                    }
+                }
             } else {
                 Toast.makeText(
                     requireContext(),
-                    "Location weather update is unavailable!",
+                    "Location weather update is unavailable! Default location selected",
                     Toast.LENGTH_LONG
                 )
                 weatherViewModel.updateWeather(
@@ -59,7 +70,6 @@ class WeatherFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-
         return inflater.inflate(R.layout.weather_fragment, container, false)
     }
 
@@ -71,28 +81,7 @@ class WeatherFragment : Fragment() {
         degreesTypeToggle.isChecked = WeatherPreferences.getInstance()
             .getFahrenheitMode(requireContext())
 
-        weatherViewModel.updateWeather(
-            WeatherPreferences.getInstance().getCityId(requireContext()),
-            WeatherPreferences.getInstance().getFahrenheitMode(requireContext())
-        )
-
-        when {
-            ContextCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) == PackageManager.PERMISSION_GRANTED -> {
-                /*weatherViewModel.changeLocationCoordinates(
-                    WeatherPreferences.getInstance().getFahrenheitMode(requireContext())
-                )*/
-                weatherViewModel.updateWeather(
-                    WeatherPreferences.getInstance().getCityId(requireContext()),
-                    WeatherPreferences.getInstance().getFahrenheitMode(requireContext())
-                )
-            }
-            else -> {
-                requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-            }
-        }
+        updateWeatherViaCoordinates()
 
         degreesTypeToggle.setOnCheckedChangeListener { _: CompoundButton, _: Boolean ->
             Log.d(TAG, "Change temperature display mode!")
@@ -124,6 +113,11 @@ class WeatherFragment : Fragment() {
             textInputLayout.visibility = View.GONE
         }
 
+        myLocationIcon.setOnClickListener {
+            loading.visibility = View.VISIBLE
+            updateWeatherViaCoordinates()
+        }
+
         weatherViewModel.weatherResult.observe(viewLifecycleOwner, Observer {
             val weatherResult = it ?: return@Observer
 
@@ -151,6 +145,7 @@ class WeatherFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity())
     }
 
     private fun updateUiWithWeather(weatherView: WeatherView) {
@@ -173,6 +168,26 @@ class WeatherFragment : Fragment() {
             Snackbar.LENGTH_SHORT).show()*/
     }
 
+    private fun updateWeatherViaCoordinates() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+            return
+        }
+        fusedLocationClient.lastLocation.addOnSuccessListener {
+            if (it != null) {
+                weatherViewModel.changeLocationCoordinates(
+                    it.latitude,
+                    it.longitude,
+                    WeatherPreferences.getInstance().getFahrenheitMode(requireContext())
+                )
+            }
+        }
+    }
+
     private fun updateWeatherIcon(weatherType: Int) {
         when(weatherType / 100) {
             2 ->  weatherIcon.setImageResource(R.drawable.strom)
@@ -182,10 +197,4 @@ class WeatherFragment : Fragment() {
             else -> weatherIcon.setImageResource(R.drawable.partly_cloudy)
         }
     }
-
-    /*private fun changeCity(cityName: String) {
-        Log.d("DEBUG","change city name!")
-        weatherViewModel.updateWeatherData(cityName)
-        CityStoring(this.activity).setCity(cityName)
-    }*/
 }

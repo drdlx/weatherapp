@@ -45,6 +45,21 @@ class WeatherRepository @Inject constructor(
         }
     }
 
+    suspend fun getWeatherByCoordinates(
+        lat: Double,
+        lon: Double,
+        isFahrenheitMode: Boolean
+    ): Result<WeatherView> = withContext(Dispatchers.IO) {
+        when (val response = remoteDataSource.getWeatherByCoordinates(lat, lon, isFahrenheitMode)) {
+            is Result.Success -> {
+                return@withContext Result.Success(serializeWeatherResponse(response.data))
+            }
+            is Result.Error -> {
+                return@withContext Result.Error(response.exception)
+            }
+        }
+    }
+
     private fun serializeWeatherResponse(
         response: WeatherResponse,
     ): WeatherView {
@@ -62,6 +77,4 @@ class WeatherRepository @Inject constructor(
         )
 
     }
-
-    /*suspend fun getWeatherByCoordinates(lat: Int, lon: Int) {}*/
 }

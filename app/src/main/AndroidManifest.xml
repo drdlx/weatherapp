@@ -17,14 +17,6 @@
             android:allowBackup="true"
             android:fullBackupContent="true">
 
-        <service
-                android:name=".data.location.LocationService"
-                android:enabled="true"
-                android:exported="true"
-                android:permission="ACCESS_BACKGROUND_LOCATION">
-
-        </service>
-
         <activity
                 android:name=".ui.weather.WeatherActivity"
                 android:label="@string/app_name"
