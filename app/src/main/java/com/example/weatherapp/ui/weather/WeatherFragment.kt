@@ -15,6 +15,7 @@ import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.weather_fragment.*
 import kotlinx.android.synthetic.main.weather_fragment.view.*
+import android.util.Log
 
 @AndroidEntryPoint
 class WeatherFragment : Fragment() {
@@ -42,35 +43,6 @@ class WeatherFragment : Fragment() {
             changeCity(city)
         }*/
 
-        /*val changeCity: TextView? = rootView.findViewById(R.id.changeCity) as? TextView
-        changeCity!!.setOnClickListener {
-            Log.d("DEBUG", "OnClick by CityName")
-            showInputCityVisilibity()
-        }*/
-
-//        val degreesTypeToggle = requireView().findViewById<ToggleButton>(R.id.degreesTypeToggle)
-
-        /*degreesTypeToggle.setOnCheckedChangeListener { _: CompoundButton, _: Boolean ->
-            Log.d(TAG, "Change temperature display mode!")
-            Log.d("SWITCH", degreesTypeToggle.isChecked.toString())
-
-            CityStoring(this.activity).setFahrenheitMode(degreesTypeToggle.isChecked)
-            Log.d("SWITCH", CityStoring(this.activity).getFahrenheitMode().toString())
-
-            updateWeatherData(CityStoring(this.activity).getCity())
-
-        }
-        */
-
-        /*val changeCityOk = requireActivity().findViewById<Button>(R.id.changeCityOk)
-
-        changeCityOk.setOnClickListener {
-            Log.d("DEBUG", "Ok button pressed!")
-            val cityLocation = changeCityInput.text
-            weatherViewModel.changeLocationCity(cityLocation.toString())
-            hideInputCityVisilibity()
-        }*/
-
         /*val myLocation = requireActivity().findViewById<TextView>(R.id.myLocation)
         myLocation.setOnClickListener {
             Log.d("DEBUG", "My Location!")
@@ -88,6 +60,33 @@ class WeatherFragment : Fragment() {
         loading.visibility = View.VISIBLE
 
         weatherViewModel.updateWeather()
+
+        degreesTypeToggle.setOnCheckedChangeListener { _: CompoundButton, _: Boolean ->
+            Log.d(TAG, "Change temperature display mode!")
+            Log.d(TAG, degreesTypeToggle.isChecked.toString())
+
+            /*CityStoring(this.activity).setFahrenheitMode(degreesTypeToggle.isChecked)
+            Log.d("SWITCH", CityStoring(this.activity).getFahrenheitMode().toString())
+
+            updateWeatherData(CityStoring(this.activity).getCity())*/
+
+        }
+
+        /*val changeCity: TextView = requireActivity().findViewById(R.id.changeCity)
+        val changeCityOk = requireActivity().findViewById<Button>(R.id.changeCityOk)*/
+
+        changeCity.setOnClickListener {
+            Log.d("DEBUG", "Display change city form")
+
+            textInputLayout.visibility = View.VISIBLE
+        }
+
+        changeCityOk.setOnClickListener {
+            Log.d("DEBUG", "Ok button pressed!")
+            val cityLocation = changeCityInput.text
+            weatherViewModel.changeLocationCity(cityLocation.toString())
+            textInputLayout.visibility = View.GONE
+        }
 
         weatherViewModel.weatherResult.observe(viewLifecycleOwner, Observer {
             val weatherResult = it ?: return@Observer

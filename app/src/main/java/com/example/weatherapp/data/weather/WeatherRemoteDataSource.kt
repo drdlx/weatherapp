@@ -38,6 +38,29 @@ class WeatherRemoteDataSource @Inject constructor() {
         }
     }
 
+    fun getWeatherByCityName(
+        cityName: String,
+    ): Result<WeatherResponse> {
+        val response = WeatherNetwork
+            .retrofit
+            .getWeatherByCityName(
+                cityName,
+                BuildConfig.WEATHER_API_KEY
+            ).execute()
+
+        Log.d("DEBUG", "$response")
+        return if (response.isSuccessful) {
+            val result = response.body()
+            if (result != null) {
+                Result.Success(result)
+            } else {
+                Result.Error(Exception("Response is empty!"))
+            }
+        } else {
+            Result.Error(Exception("${response.errorBody()}"))
+        }
+    }
+
     companion object {
         private const val TAG = "WeatherRemoteDataSource"
     }

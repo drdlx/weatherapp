@@ -13,52 +13,37 @@ import javax.inject.Inject
 
 @HiltViewModel
 class WeatherViewModel @Inject constructor(
-    val weatherRepository: WeatherRepository
+    private val weatherRepository: WeatherRepository
 ): ViewModel() {
-
-    /*companion object {
-        private const val BASE_URL = ""
-        private const val API_KEY = BuildConfig.WEATHER_API_KEY
-    }*/
 
     private val _weatherResult = MutableLiveData<WeatherResult>()
     val weatherResult: LiveData<WeatherResult> = _weatherResult
 
+    private fun updateWeatherUi(result: Result<WeatherView>) {
+
+        when(result) {
+            is Result.Success -> {
+                _weatherResult.postValue(
+                    WeatherResult(
+                        success = result.data
+                    )
+                )
+            }
+            is Result.Error -> {
+                _weatherResult.postValue(
+                    WeatherResult(
+                        error = R.string.weather_load_error
+                    )
+                )
+            }
+        }
+    }
+
     fun updateWeather() {
 
         viewModelScope.launch {
-            when(val result = weatherRepository.getWeatherByCityId(2172797)) {
-                is Result.Success -> {
-                    _weatherResult.postValue(
-                        WeatherResult(
-                            success = result.data
-                        )
-                    )
-                }
-                is Result.Error -> {
-                    _weatherResult.postValue(
-                        WeatherResult(
-                            error = R.string.weather_load_error
-                        )
-                    )
-                }
-            }
-/*
-            _weatherResult.postValue(
-                WeatherResult(
-                    success = WeatherView(
-                        temperatureDegrees = 25,
-                        city = "New York",
-                        weatherDescription = "Good",
-                        wind = "NW",
-                        pressure = 25,
-                        humidity = 36,
-                        riskOfRain = "Maybe",
-                        weatherType = 200
-                    )
-                )
-            )
-*/
+            val result = weatherRepository.getWeatherByCityId(2172797)
+            updateWeatherUi(result)
         }
     }
 
@@ -83,6 +68,11 @@ class WeatherViewModel @Inject constructor(
     }
 
     fun changeLocationCity(city: String) {
+
+        viewModelScope.launch {
+            val result = weatherRepository.getWeatherByCityName(city)
+            updateWeatherUi(result)
+        }
     }
 
     /*private val locationListener: LocationListener = object: LocationListener {
