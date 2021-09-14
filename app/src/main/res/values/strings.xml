@@ -15,8 +15,8 @@
     <string name="coords_issue">Please use "Change city" button</string>
     <string name="degrees">%d&#176;</string>
     <string name="pressure">%d mm</string>
-    <string name="humidity">%d&#176;</string>
-    <string name="rain_possibility">%d&#176;</string>
+    <string name="humidity">%d&#37;</string>
+    <string name="rain_possibility">%d&#37;</string>
     <string name="weather_load_error">Error occurred during weather update!</string>
 </resources>
 
